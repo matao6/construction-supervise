@@ -33,7 +33,7 @@
                 </li>
               </router-link>
             </div>
-          </ul>
+          </ul> 
         </div>
         <div class="main-body p-2">
           <router-view></router-view>
