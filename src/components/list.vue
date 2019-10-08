@@ -21,9 +21,27 @@
           <td>{{item.companyStatus}}</td>
           <td>{{item.registerTime}}</td>
           <td>
-            <button class="btn btn-sm btn-primary mr-2" v-bind:murl="'?id='+item.id" v-bind:mid="item.id">查看</button>
-            <button class="btn btn-sm btn-warning mr-2" v-bind:murl="'?id='+item.id" v-bind:mid="item.id">编辑</button>
-            <button class="btn btn-sm btn-danger mr-2" v-bind:murl="'?id='+item.id" v-bind:mid="item.id">删除</button>
+            <!-- <router-link v-bind:to="'./check?id='+item.id">
+              <button class="btn btn-sm btn-primary mr-2 text-white" v-bind:mid="item.id">查看</button>
+            </router-link>-->
+            <!-- show('/check?id'+item.id,'查看','100%','90%') -->
+            <a
+              class="btn btn-sm btn-primary mr-2 text-white"
+              v-bind:href="'./check?id='+item.id"
+              v-bind:mid="item.id"
+            >查看</a>
+            <a
+              class="btn btn-sm btn-warning mr-2"
+              v-bind:murl="'?id='+item.id"
+              v-bind:href="'./edit?id='+item.id"
+              v-bind:mid="item.id"
+            >编辑</a>
+            <button
+              class="btn btn-sm btn-danger mr-2"
+              v-bind:murl="'?id='+item.id"
+              v-bind:mid="item.id"
+              v-on:click="$emit('changeTag')"
+            >删除{{tag}}</button>
           </td>
         </tr>
       </tbody>
@@ -51,50 +69,65 @@
 </template>
 
 <script>
+import "../assets/js/layer.js";
+
 export default {
   name: "list",
-  data: function() {
-    return listData;
+  data() {
+    return {
+      items: null,
+      nowRouter: location.href
+    };
+  },
+  props:{
+    tag: Boolean
+  },
+  methods: {
+    show: function(url, title, w, h) {
+      layer.open({
+        type: 2,
+        content: url,
+        title: title,
+        shadeClose: true,
+        shade: 0.6,
+        area: [w, h]
+      });
+    }
+  },
+  created() {
+    var that = this;
+    this.$http
+      .get("/json/test.json")
+      .then(function(response) {
+        // console.log(response.data.items)
+        // console.log(that.items)
+        that.items = response.data.items;
+      })
+      .catch(function(error) {
+        // 请求失败处理
+        console.log(error);
+      });
   }
 };
-
-var listData = {
-  items: [
-    {
-      id: 1,
-      name: "n",
-      email: '11@163.com',
-      companyType: '有限',
-      companyStatus: '1',
-      registerTime: '219-08-06'
-    },
-    {
-      id: 2,
-      name: "a",
-      email: '22@163.com',
-      companyType: '有限',
-      companyStatus: '2',
-      registerTime: '219-08-06'
-    },
-    {
-      id: 3,
-      name: "m",
-      email: '33@163.com',
-      companyType: '有限',
-      companyStatus: '1',
-      registerTime: '219-08-06'
-    },
-    {
-      id: 4,
-      name: "e",
-      email: '44@163.com',
-      companyType: '有限',
-      companyStatus: '2',
-      registerTime: '219-08-06'
-    }
-  ]
-};
+// function getData(){
+// var items;
+//   $.ajax({
+//     url: ,
+//     data: '',
+//     type: 'post',
+//     dataType: 'json',
+//     success: function(data){
+//       items= data.items;
+//     },
+//     error: function(data){
+//       items=''
+//     }
+//   });
+//   return items;
+// }
+// getData();
 </script>
 
 <style>
+@import "../assets/js/theme/default/layer.css";
 </style>
