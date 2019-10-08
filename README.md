@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# hello-world
+# zxbackcontrol
 
 ## Project setup
 ```
@@ -31,4 +30,3 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 =======
 # construction-supervise
 construction industry information supervision platform
->>>>>>> e48582b515da1ca3411e3759067655a9f8595b06
