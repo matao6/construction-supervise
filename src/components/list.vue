@@ -40,8 +40,14 @@
               class="btn btn-sm btn-danger mr-2"
               v-bind:murl="'?id='+item.id"
               v-bind:mid="item.id"
+              v-on:click="open"
+            >删除</button>
+            <!-- <button
+              class="btn btn-sm btn-danger mr-2"
+              v-bind:murl="'?id='+item.id"
+              v-bind:mid="item.id"
               v-on:click="$emit('changeTag')"
-            >删除{{tag}}</button>
+            >删除{{tag}}</button> -->
           </td>
         </tr>
       </tbody>
@@ -69,7 +75,7 @@
 </template>
 
 <script>
-import "../assets/js/layer.js";
+// import func from '../../vue-temp/vue-editor-bridge';
 
 export default {
   name: "list",
@@ -83,20 +89,21 @@ export default {
     tag: Boolean
   },
   methods: {
-    show: function(url, title, w, h) {
-      layer.open({
-        type: 2,
-        content: url,
-        title: title,
-        shadeClose: true,
-        shade: 0.6,
-        area: [w, h]
-      });
+    open(){
+      this.$confirm('确定删除吗?','提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+        }).then(()=>{
+
+        }).catch(()=>{
+
+        });
     }
   },
-  created() {
+  created: function() {
     var that = this;
-    this.$http
+    this.axios
       .get("/json/test.json")
       .then(function(response) {
         // console.log(response.data.items)
@@ -105,7 +112,7 @@ export default {
       })
       .catch(function(error) {
         // 请求失败处理
-        console.log(error);
+        console.log()
       });
   }
 };
@@ -129,5 +136,4 @@ export default {
 </script>
 
 <style>
-@import "../assets/js/theme/default/layer.css";
 </style>
