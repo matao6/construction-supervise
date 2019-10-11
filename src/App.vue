@@ -15,7 +15,7 @@
         <div>
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="javascript:;">消息</a>
+              <a class="nav-link" href="javascript:;" v-on:click="showmsg">消息</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="javascript:;">个人中心</a>
@@ -51,6 +51,7 @@
 <script>
 // import HelloWorld from "./components/HelloWorld.vue";
 // import check from "./components/check";
+import Message from "./components/message";
 
 export default {
   name: "app",
@@ -58,25 +59,40 @@ export default {
     return {
       navs:null,
       tag: false,
-      parentTab: "index"
+      parentTab: "index",
+      key: 1
     };
-  },
-  methods: {
-    change: function(){
-      this.tag=!this.tag
-    }
   },
   components: {
     // HelloWorld
     // check
+    Message
   },
-  created(){
+  methods: {
+    change: function(){
+      this.tag=!this.tag
+    },
+    showmsg: function(){
+      const h = this.$createElement;
+      this.$msgbox({
+        title: '消息',
+        message: h(Message,{key: this.key++}),
+        showCancelButton: false,
+        showConfirmButton: false
+      }).catch(()=>{
+
+      })
+    }
+  },
+  created: function(){
     var that = this;
-    this.$http
+    this.axios
     .get('/json/test.json')
-    .then(response => that.navs = response.data.navs)
-    .cache(function(error){
-      conssole.log(error)
+    .then(function(response) {
+      that.navs = response.data.navs
+    })
+    .catch(function(error) {
+      console.log(error)
     });
   }
 };
