@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import ElementUI from 'element-ui'
 import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 import './assets/css/rest.css'
 import './assets/css/bootstrap.min.css'
+import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/index.css'
 
 import './assets/js/jquery.min.js'
@@ -14,6 +16,7 @@ import './assets/js/bootstrap.min.js'
 // all register
 Vue.use(VueRouter)
 Vue.use(VueAxios,axios)
+Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 
