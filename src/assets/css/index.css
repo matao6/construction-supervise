@@ -19,9 +19,7 @@ a:hover{
 .main-layout .main-inner {
     flex: 1; display: flex;
 }
-.main-layout .navbar-brand{
 
-}
 .main-layout .main-inner .main-sidebar-wrapper{
     min-width: 64px; background-color: #fff;
     width: 210px; box-sizing: border-box;
