@@ -21,27 +21,23 @@
           <td>{{item.companyStatus}}</td>
           <td>{{item.registerTime}}</td>
           <td>
-            <!-- <router-link v-bind:to="'./check?id='+item.id">
-              <button class="btn btn-sm btn-primary mr-2 text-white" v-bind:mid="item.id">查看</button>
-            </router-link>-->
-            <!-- show('/check?id'+item.id,'查看','100%','90%') -->
             <a
               class="btn btn-sm btn-primary mr-2 text-white"
               v-bind:href="'./check?id='+item.id"
               v-bind:mid="item.id"
-            >查看</a>
+            ><i class="el-icon-view mr-1"></i>查看</a>
             <a
               class="btn btn-sm btn-warning mr-2"
               v-bind:murl="'?id='+item.id"
               v-bind:href="'./edit?id='+item.id"
               v-bind:mid="item.id"
-            >编辑</a>
+            ><i class="el-icon-edit mr-1"></i>编辑</a>
             <button
               class="btn btn-sm btn-danger mr-2"
               v-bind:murl="'?id='+item.id"
               v-bind:mid="item.id"
               v-on:click="open"
-            >删除</button>
+            ><i class="el-icon-delete mr-1"></i>删除</button>
             <!-- <button
               class="btn btn-sm btn-danger mr-2"
               v-bind:murl="'?id='+item.id"
@@ -75,7 +71,6 @@
 </template>
 
 <script>
-// import func from '../../vue-temp/vue-editor-bridge';
 
 export default {
   name: "list",
@@ -116,23 +111,6 @@ export default {
       });
   }
 };
-// function getData(){
-// var items;
-//   $.ajax({
-//     url: ,
-//     data: '',
-//     type: 'post',
-//     dataType: 'json',
-//     success: function(data){
-//       items= data.items;
-//     },
-//     error: function(data){
-//       items=''
-//     }
-//   });
-//   return items;
-// }
-// getData();
 </script>
 
 <style>

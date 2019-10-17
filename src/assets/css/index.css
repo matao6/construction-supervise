@@ -34,4 +34,5 @@ a:hover{
 .el-message-box{
     min-width: 420px;
     width: auto !important;
+    max-width: 80%;
 }
