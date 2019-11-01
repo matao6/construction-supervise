@@ -21,6 +21,8 @@ Vue.use(VueAxios,axios)
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+// 让子组件也可以使用axios
+Vue.prototype.$axios=axios
 
 const routes = [
   {
