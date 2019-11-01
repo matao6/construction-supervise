@@ -15,7 +15,7 @@
         <div>
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="javascript:;" v-on:click="showmsg">消息</a>
+              <a class="nav-link" href="javascript:;" v-on:click="showmsg" mid="2">消息</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="javascript:;">个人中心</a>
@@ -23,7 +23,7 @@
           </ul>
         </div>
       </nav>
-      <div class="main-inner">
+      <div class="main-inner h-100">
         <div class="main-sidebar-wrapper border-right p-2">
           <ul class="nav flex-column">
             <div v-for="item in navs" v-bind:key="item.id" v-show="item.parentUrl === parentTab">
@@ -39,7 +39,7 @@
             </div>
           </ul>
         </div>
-        <div class="main-body p-2">
+        <div class="main-body p-2 h-100 overflow-auto">
           <router-view v-on:changeTag="change" v-bind:tag="tag"></router-view>
         </div>
       </div>
@@ -72,15 +72,24 @@ export default {
     change: function(){
       this.tag=!this.tag
     },
-    showmsg: function(){
+    showmsg: function(event){
+      // console.log(event.target.getAttribute('mid'))
       const h = this.$createElement;
       this.$msgbox({
         title: '消息',
         message: h(Message,{key: this.key++}),
         showCancelButton: false,
         showConfirmButton: false
-      }).catch(()=>{
-
+      }).then(action=>{
+        this.$message({
+          type: 'info',
+          message: 'action: ' + action
+        })
+      }).catch(() => {
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消删除'
+        // })
       })
     }
   },

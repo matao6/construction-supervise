@@ -13,6 +13,8 @@ import './assets/css/index.css'
 import './assets/js/jquery.min.js'
 import './assets/js/bootstrap.min.js'
 
+// import Check from './components/check.vue'
+
 // all register
 Vue.use(VueRouter)
 Vue.use(VueAxios,axios)
@@ -31,7 +33,7 @@ const routes = [
   },
   {
     path: '/index/check',
-    component: (resolve) => require(['./components/check.vue'],resolve)
+    component: (resolve) => require(['./components/check.vue'], resolve)
   },
   {
     path: '/index/edit',
