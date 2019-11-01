@@ -114,8 +114,6 @@
 import Pagination from "./pagination.vue";
 import Check from "./check.vue";
 
-const m_mainUrl='http://192.168.0.192:8080';
-
 export default {
   name: "list",
   data() {
@@ -177,7 +175,7 @@ export default {
       var that = this;
       // console.log(page);
       this.axios
-        .get(m_mainUrl+"/company/list", {
+        .get(that.GLOBAL.m_mainUrl+"/company/list", {
           params: {
             page: page
           }
@@ -198,7 +196,7 @@ export default {
       var that = this;
       // console.log(page);
       this.axios
-        .get(m_mainUrl+"/company/list", {
+        .get(that.GLOBAL.m_mainUrl+"/company/list", {
           params: {
             companyName: that.input
           }
@@ -220,7 +218,7 @@ export default {
     var that = this;
     this.axios
       // .get("/json/test.json")
-      .get(m_mainUrl+"/company/list")
+      .get(that.GLOBAL.m_mainUrl+"/company/list")
       .then(function(response) {
         let mData = response.data.data;
         that.items = mData.content;

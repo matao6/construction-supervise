@@ -106,11 +106,6 @@ export default {
   }
 };
 
-
-
-// const app = new Vue({
-//   router
-// }).$mount('#app')
 </script>
 
 <style>

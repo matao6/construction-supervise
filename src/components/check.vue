@@ -92,7 +92,6 @@
 </template>
 
 <script>
-const m_mainUrl='http://192.168.0.192:8080';
 
 export default {
   name: 'check',
@@ -113,7 +112,7 @@ export default {
     if(this.id){
       var that = this;
       this.$axios
-        .get(m_mainUrl+'/company/info',{
+        .get(that.GLOBAL.m_mainUrl+'/company/info',{
           params:{
             companyId: that.id
           }

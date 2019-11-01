@@ -4,6 +4,7 @@ import ElementUI from 'element-ui'
 import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import globalVariable from './assets/js/global_variable.js/index.js'
 
 import './assets/css/rest.css'
 import './assets/css/bootstrap.min.css'
@@ -23,6 +24,8 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 // 让子组件也可以使用axios
 Vue.prototype.$axios=axios
+// 全局引用
+Vue.prototype.GLOBAL = globalVariable
 
 const routes = [
   {
