@@ -6,8 +6,6 @@
       :page-size="size"
       :total="total"
       layout="total, prev, pager, next, jumper"
-      prev-text="首页"
-      next-text="尾页"
       background
       large
     ></el-pagination>
