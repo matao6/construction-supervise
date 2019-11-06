@@ -35,42 +35,8 @@
     ],
     "navs": [
       {
-        "id": 1,
-        "parentCon": "首页1",
-        "parentUrl": "index",
-        "childCons": [
-          {
-            "id": 2,
-            "con": "页",
-            "conUrl": "ye"
-          },
-          {
-            "id": 3,
-            "con": "列表",
-            "conUrl": "list"
-          }
-        ]
-      },
-      {
-        "id": 2,
-        "parentCon": "系统设置1",
-        "parentUrl": "xitong",
-        "childCons": [
-          {
-            "id": 2,
-            "con": "系设置",
-            "conUrl": "xiset"
-          },
-          {
-            "id": 3,
-            "con": "统设置",
-            "conUrl": "tongset"
-          }
-        ]
-      },
-      {
         "id": 3,
-        "parentCon": "企业管理1",
+        "parentCon": "企业管理",
         "parentUrl": "qiye",
         "childCons": [
           {
@@ -87,7 +53,7 @@
       },
       {
         "id": 4,
-        "parentCon": "机构管理1",
+        "parentCon": "机构管理",
         "parentUrl": "jigou",
         "childCons": [
           {
@@ -99,6 +65,40 @@
             "id": 3,
             "con": "构管理",
             "conUrl": "goumanage"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "parentCon": "人员管理",
+        "parentUrl": "renyuan",
+        "childCons": [
+          {
+            "id": 2,
+            "con": "人设置",
+            "conUrl": "renset"
+          },
+          {
+            "id": 3,
+            "con": "员设置",
+            "conUrl": "yuanset"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "parentCon": "新闻管理",
+        "parentUrl": "xinwen",
+        "childCons": [
+          {
+            "id": 2,
+            "con": "新闻列表",
+            "conUrl": "xinset"
+          },
+          {
+            "id": 3,
+            "con": "闻设置",
+            "conUrl": "wenset"
           }
         ]
       }
