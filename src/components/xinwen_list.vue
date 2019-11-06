@@ -1,0 +1,228 @@
+<template>
+  <div class="table-responsive">
+    <div class style="padding: 15px;">
+      <el-input
+        v-model="input"
+        clearable
+        size="medium"
+        placeholder="请输入标题"
+        style="width: 180px; display: inline-block;"
+      >
+        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+      </el-input>
+      <el-button type="primary" size="medium" style="margin-left: 15px;" @click="searchInfo">搜索</el-button>
+    </div>
+    <el-table :data="items" border style="width: 100%">
+      <el-table-column prop="id" label="ID" width="80"></el-table-column>
+      <el-table-column prop="author" label="作者" width="120"></el-table-column>
+      <el-table-column prop="title" label="标题" width="180"></el-table-column>
+      <el-table-column label="内容" width="330">
+        <template slot-scope="scope">
+          <div>{{scope.row.content}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
+      <el-table-column prop="updateTime" label="更新时间" width="160"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <button
+            class="btn btn-sm btn-primary mr-2 text-white"
+            v-bind:mid="scope.row.id"
+            @click="showCheck"
+          >查看</button>
+          <button class="btn btn-sm btn-warning mr-2" v-bind:mid="scope.row.id" @click="showEdit">编辑</button>
+          <button class="btn btn-sm btn-danger mr-2" v-bind:mid="scope.row.id" v-on:click="open">删除</button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <input type="hidden" name id="h_id" />
+    <input type="hidden" v-model="refresh" id="h_refresh" />
+    <Pagination
+      v-show="currentPage"
+      :currentPage="currentPage"
+      :total="total"
+      :size="size"
+      @changePage="changePage"
+    ></Pagination>
+  </div>
+</template>
+
+<script>
+import Pagination from "./pagination.vue";
+import Check from "./xinwen_check.vue";
+import Editor from "./xinwen_edit.vue";
+
+export default {
+  name: "list",
+  data() {
+    return {
+      // 列表数据
+      items: [],
+      // 分页数据
+      currentPage: 0,
+      total: 0,
+      size: 15,
+      // 本地href
+      nowRouter: location.href,
+      // el-input
+      input: "",
+      // key
+      key: 1,
+      // 刷新tag
+      refresh: true
+    };
+  },
+  props: {
+    tag: Boolean
+  },
+  components: {
+    Pagination,
+    Check,
+    Editor
+  },
+  watch: {
+    // 从子组件xinwen_edit中，监控refresh tag无刷新获取获取数据
+    refresh(val) {
+      var now = this.refresh;
+      console.log("watch1", now);
+      if (now == "false") {
+        console.log("watch2", now);
+        var getPage = document.querySelector(".el-pager .number.active")
+          .innerText;
+        // 刷新当前列表
+        this.changePage(getPage);
+        // 关闭弹框
+        $('.v-modal').click();
+        // 重置refresh tag
+        this.refresh = true;
+      }
+
+      // this.$nextTick(() => {
+      //   this.refresh = true;
+      // });
+    }
+  },
+  methods: {
+    showCheck(event) {
+      document.querySelector("#h_id").value = event.target.getAttribute("mid");
+      const h = this.$createElement;
+      var that = this;
+      this.$msgbox({
+        title: "查看",
+        message: h(Check, { key: that.key++ }),
+        showCancelButton: false,
+        showConfirmButton: false
+      })
+        .then(action => {})
+        .catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消删除'
+          // })
+        });
+    },
+    showEdit(event) {
+      document.querySelector("#h_id").value = event.target.getAttribute("mid");
+      const h = this.$createElement;
+      var that = this;
+      this.$msgbox({
+        title: "编辑",
+        message: h(Editor, { key: that.key++ }),
+        showCancelButton: false,
+        showConfirmButton: false
+      })
+        .then(action => {})
+        .catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消删除'
+          // })
+        });
+    },
+    open() {
+      this.$confirm("确定删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {})
+        .catch(() => {});
+    },
+    changePage(page) {
+      var that = this;
+      // console.log(page);
+      this.axios
+        .get(that.GLOBAL.m_mainUrl + "/webnews/lists", {
+          params: {
+            page: page
+          }
+        })
+        .then(function(response) {
+          // console.log(response);
+          if (response.status == 200) {
+            let mData = response.data.data;
+            that.items = mData.content;
+            that.currentPage = mData.pageable.pageNumber + 1;
+            that.total = mData.totalElements;
+            that.size = mData.size;
+          }
+        })
+        .catch(function(error) {
+          // 请求失败处理
+          console.log(error);
+        });
+    },
+    searchInfo() {
+      var that = this;
+      this.axios
+        .get(that.GLOBAL.m_mainUrl + "/webnews/lists", {
+          params: {
+            companyName: that.input
+          }
+        })
+        .then(function(response) {
+          if (response) {
+            if (response.status == 200) {
+              let mData = response.data.data;
+              that.items = mData.content;
+              that.currentPage = mData.pageable.pageNumber + 1;
+              that.total = mData.totalElements;
+              that.size = mData.size;
+            }
+          }
+        })
+        .catch(function(error) {
+          // 请求失败处理
+          console.log(error);
+        });
+    }
+  },
+  created: function() {
+    var that = this;
+    this.axios({
+      method: "get",
+      url: that.GLOBAL.m_mainUrl + "/webnews/lists"
+    })
+      .then(function(response) {
+        // console.log(response);
+        if (response.status == 200) {
+          let mData = response.data.data;
+          that.items = mData.content;
+          that.currentPage = mData.pageable.pageNumber + 1;
+          that.total = mData.totalElements;
+          that.size = mData.size;
+        }
+      })
+      .catch(function(error) {
+        // 请求失败处理
+        console.log(error);
+      });
+  }
+};
+</script>
+
+<style>
+.el-table .cell {
+  max-height: 70px;
+}
+</style>
