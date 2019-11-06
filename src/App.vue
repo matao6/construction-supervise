@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="h-100">
-    <div class="main-layout">
+    <router-view name="login"></router-view>
+    <div class="main-layout" v-if="showIndex">
       <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex">
         <div class="collapse navbar-collapse">
           <a class="navbar-brand" href="javascript:;">控制中心</a>
@@ -57,10 +58,15 @@ export default {
   name: "app",
   data: function() {
     return {
+      // 导航数据
       navs:null,
+      // 测试标记
       tag: false,
-      parentTab: "index",
-      key: 1
+      // 父级标记
+      parentTab: location.href.split('/')[3],
+      key: 1,
+      // 是否显示首页
+      showIndex: true
     };
   },
   components: {

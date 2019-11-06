@@ -4,7 +4,10 @@ import ElementUI from 'element-ui'
 import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import globalVariable from './assets/js/global_variable.js/index.js'
+// 引用全局变量
+import globalVariable from './assets/js/global_variable.js'
+// 引用全局函数
+import globalFun from './assets/js/global_fun.js'
 
 import './assets/css/rest.css'
 import './assets/css/bootstrap.min.css'
@@ -14,12 +17,14 @@ import './assets/css/index.css'
 import './assets/js/jquery.min.js'
 import './assets/js/bootstrap.min.js'
 
-// import Check from './components/check.vue'
+import Login from './components/login.vue'
 
 // all register
 Vue.use(VueRouter)
 Vue.use(VueAxios,axios)
 Vue.use(ElementUI)
+// 全局函数
+Vue.use(globalFun)
 
 Vue.config.productionTip = false
 // 让子组件也可以使用axios
@@ -29,20 +34,26 @@ Vue.prototype.GLOBAL = globalVariable
 
 const routes = [
   {
-    path: '/index/list',
+    path: '/qiye/qimanage',
     component: (resolve) => require(['./components/list.vue'],resolve)
   },
   {
-    path: '/index',
-    component: (resolve) => require(['./components/index.vue'], resolve)
-  },
-  {
-    path: '/index/check',
+    path: '/qiye/check',
     component: (resolve) => require(['./components/check.vue'], resolve)
   },
   {
-    path: '/index/edit',
-    component: (resolve) => require(['./components/check.vue'],resolve)
+    path: '/qiye/edit',
+    component: (resolve) => require(['./components/edit.vue'],resolve)
+  },
+  {
+    path: '/xinwen/xinset',
+    component: (resolve) => require(['./components/xinwen_list.vue'],resolve)
+  },
+  {
+    path: '/login',
+    components: {
+      login: Login
+    }
   }
 ]
 
