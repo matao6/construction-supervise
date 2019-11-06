@@ -143,9 +143,10 @@ export default {
     showCheck(event){
       document.querySelector('#h_id').value=event.target.getAttribute('mid');
       const h = this.$createElement;
+      var that = this;
       this.$msgbox({
         title: '查看',
-        message: h(Check, {key: this.key++}),
+        message: h(Check, {key: that.key++}),
         showCancelButton: false,
         showConfirmButton: false
       })
