@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="h-100">
-    <router-view name="login"></router-view>
+    <router-view name="login" v-if="!showIndex"></router-view>
     <div class="main-layout" v-if="showIndex">
       <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex">
         <div class="collapse navbar-collapse">
@@ -19,7 +19,19 @@
               <a class="nav-link" href="javascript:;" v-on:click="showmsg" mid="2">消息</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="javascript:;">个人中心</a>
+              <el-dropdown>
+                <span class="nav-link el-dropdown-link">
+                  下拉菜单
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu trigger="click" slot="dropdown">
+                  <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-circle-check">蚵仔煎</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </li>
           </ul>
         </div>
@@ -59,14 +71,14 @@ export default {
   data: function() {
     return {
       // 导航数据
-      navs:null,
+      navs: null,
       // 测试标记
       tag: false,
       // 父级标记
-      parentTab: location.href.split('/')[3],
+      parentTab: location.href.split("/")[3],
       key: 1,
       // 是否显示首页
-      showIndex: true
+      showIndex: false
     };
   },
   components: {
@@ -75,43 +87,55 @@ export default {
     Message
   },
   methods: {
-    change: function(){
-      this.tag=!this.tag
+    change: function() {
+      this.tag = !this.tag;
     },
-    showmsg: function(event){
+    showmsg: function(event) {
       // console.log(event.target.getAttribute('mid'))
       const h = this.$createElement;
       this.$msgbox({
-        title: '消息',
-        message: h(Message,{key: this.key++}),
+        title: "消息",
+        message: h(Message, { key: this.key++ }),
         showCancelButton: false,
         showConfirmButton: false
-      }).then(action=>{
-        this.$message({
-          type: 'info',
-          message: 'action: ' + action
-        })
-      }).catch(() => {
-        // this.$message({
-        //   type: 'info',
-        //   message: '已取消删除'
-        // })
       })
+        .then(action => {
+          this.$message({
+            type: "info",
+            message: "action: " + action
+          });
+        })
+        .catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消删除'
+          // })
+        });
     }
   },
-  created: function(){
+  created: function() {
+    // console.log("created");
+    // 别的页面进入之后，如果没有登录，返回登录页
+    if (sessionStorage.getItem("showIndex") == "true") {
+      this.showIndex = sessionStorage.getItem("showIndex");
+    } else {
+      if (location.href.split("/")[3] == "login") {
+      } else {
+        window.location.href = "http://localhost:8080/login";
+      }
+    }
+    //
     var that = this;
     this.axios
-    .get('/json/test.json')
-    .then(function(response) {
-      that.navs = response.data.navs
-    })
-    .catch(function(error) {
-      console.log(error)
-    });
+      .get("/json/test.json")
+      .then(function(response) {
+        that.navs = response.data.navs;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 };
-
 </script>
 
 <style>
