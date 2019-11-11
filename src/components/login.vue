@@ -13,25 +13,26 @@
             <div class="card-text">
               <form>
                 <div class="form-group">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputAdmin"
-                    placeholder="Enter account"
-                  />
+                  <el-input v-model.trim="username" placeholder="Enter account" />
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control" id="inputPass" placeholder="Password" />
+                  <el-input v-model.trim="password" placeholder="Password" show-password />
                 </div>
-                <div class="form-group">
-                  <input
-                    type="tel"
-                    class="form-control"
-                    id="exampleInputPassword1"
-                    placeholder="verify"
-                  />
+                <div class="form-group" @mouseover="onMouseover" @mouseout="onMouseout">
+                  <slide-verify
+                    :l="52"
+                    :r="10"
+                    :w="339"
+                    :h="155"
+                    slider-text="向右滑动验证"
+                    @success="onSuccess"
+                    @fail="onFail"
+                    @refresh="onRefresh"
+                  ></slide-verify>
                 </div>
-                <button type="button" class="btn btn-outline-primary">确认登录</button>
+                <div class="text-center">
+                  <el-button type="primary" :loading="isLoading" @click="mLogin">确认登录</el-button>
+                </div>
               </form>
             </div>
           </div>
@@ -54,27 +55,125 @@
 
 <script>
 export default {
-  name: "login"
-};
-$(function() {
-  $(".btn-outline-primary").click(function() {
-    jxcmain.ajaxcall(
-      {
-        admin_name: $("#inputAdmin").val(),
-        admin_password: $.md5($("#inputPass").val()),
-        url: "cpp/operator/login",
-        device_id: "192.168.1.150"
-      },
-      retcallback
-    );
-  });
-});
-function retcallback(ret) {
-  console.log(ret.success);
-  if (ret.success) {
-    window.location.href = "/index/index/main";
+  name: "login",
+  data: function() {
+    return {
+      username: "",
+      password: "",
+      // 按钮加载
+      isLoading: false,
+      // 滑动验证
+      slideVerify: false
+    };
+  },
+  methods: {
+    mLogin: function() {
+      if (this.username == "") {
+        this.$message({
+          message: "请填写用户名!",
+          duration: 2000,
+          type: "error"
+        });
+        return false;
+      }
+      if (this.password == "") {
+        this.$message({
+          message: "请填写密码!",
+          duration: 2000,
+          type: "error"
+        });
+        return false;
+      }
+      if (this.slideVerify == false) {
+        this.$message({
+          message: "请滑动验证!",
+          duration: 2000,
+          type: "error"
+        });
+        return false;
+      }
+      this.isLoading = true;
+      let that = this;
+      this.$axios({
+        url: that.GLOBAL.m_mainUrl + "/login",
+        method: "post",
+        // headers: { 'auth': "XMLHttpRequest" },
+        params: {
+          username: that.username,
+          password: that.password
+        }
+      })
+        .then(function(response) {
+          // console.log(response);
+          that.isLoading = false;
+          if (response.data.code == 200) {
+            that.$message({
+              message: response.data.message,
+              duration: 2000,
+              type: "success"
+            });
+            sessionStorage.setItem("showIndex", true);
+            sessionStorage.setItem("auth", response.data.data.token);
+            location.href="http://localhost:8080/xinwen/xinset";
+          } else {
+            sessionStorage.setItem("showIndex", false);
+            that.$message({
+              message: response.data.message,
+              duration: 2000,
+              type: "error"
+            });
+          }
+        })
+        .catch(function(error) {
+          sessionStorage.setItem("showIndex", false);
+          that.isLoading = false;
+          console.log(error);
+        });
+    },
+    onSuccess: function() {
+      this.slideVerify = true;
+      this.$message({
+        message: "验证成功!",
+        duration: 2000,
+        type: "success"
+      });
+    },
+    onFail: function() {
+      this.slideVerify = false;
+      this.$message({
+        message: "验证失败!",
+        duration: 2000,
+        type: "error"
+      });
+    },
+    onRefresh: function() {},
+    onMouseover: () => {
+      document.querySelectorAll("canvas")[0].style.display = "block";
+      document.querySelectorAll("canvas")[1].style.display = "block";
+      document.querySelector(".slide-verify-refresh-icon").style.display =
+        "block";
+    },
+    onMouseout: () => {
+      document.querySelectorAll("canvas")[0].style.display = "none";
+      document.querySelectorAll("canvas")[1].style.display = "none";
+      document.querySelector(".slide-verify-refresh-icon").style.display =
+        "none";
+    }
+  },
+  mounted: function() {
+    document.querySelector(".slide-verify-slider").style.width = 339 + "px";
+    document.querySelector(".slide-verify").style.width = 339 + "px";
+    document.querySelectorAll("canvas")[0].style.display = "none";
+    document.querySelectorAll("canvas")[0].style.position = "absolute";
+    document.querySelectorAll("canvas")[0].style.top = -155 + "px";
+    document.querySelectorAll("canvas")[1].style.display = "none";
+    document.querySelectorAll("canvas")[1].style.position = "absolute";
+    document.querySelectorAll("canvas")[1].style.top = -155 + "px";
+    document.querySelector(".slide-verify-refresh-icon").style.top =
+      -155 + "px";
+    document.querySelector(".slide-verify-refresh-icon").style.display = "none";
   }
-}
+};
 </script>
 
 <style>
