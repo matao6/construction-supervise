@@ -1,0 +1,282 @@
+{
+    "navs": [
+      {
+        "id": 1,
+        "parentCon": "系统设定",
+        "parentUrl": "system",
+        "childCons": [
+          {
+            "id": 2,
+            "con": "基本信息",
+            "conUrl": "base"
+          },
+          {
+            "id": 3,
+            "con": "新闻公告",
+            "conUrl": "news"
+          },
+          {
+            "id": 4,
+            "con": "使用帮助",
+            "conUrl": "use"
+          },
+          {
+            "id": 5,
+            "con": "功能设定",
+            "conUrl": "function"
+          },
+          {
+            "id": 6,
+            "con": "管理员",
+            "conUrl": "manager"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "parentCon": "企业管理",
+        "parentUrl": "company",
+        "childCons": [
+          {
+            "id": 8,
+            "con": "企业列表",
+            "conUrl": "clist"
+          },
+          {
+            "id": 9,
+            "con": "企业部门",
+            "conUrl": "cdepartment"
+          },
+          {
+            "id": 10,
+            "con": "企业人员",
+            "conUrl": "cperson"
+          },
+          {
+            "id": 11,
+            "con": "事故信息",
+            "conUrl": "accident"
+          },
+          {
+            "id": 12,
+            "con": "奖惩列表",
+            "conUrl": "reward"
+          },
+          {
+            "id": 13,
+            "con": "资质管理",
+            "conUrl": "aptitude"
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "parentCon": "机构管理",
+        "parentUrl": "organization",
+        "childCons": [
+          {
+            "id": 15,
+            "con": "机构列表",
+            "conUrl": "olist"
+          },
+          {
+            "id": 16,
+            "con": "机构部门",
+            "conUrl": "odepartment"
+          },
+          {
+            "id": 17,
+            "con": "监督小组",
+            "conUrl": "supervise"
+          },
+          {
+            "id": 18,
+            "con": "机构人员",
+            "conUrl": "operson"
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "parentCon": "人员管理",
+        "parentUrl": "person",
+        "childCons": [
+          {
+            "id": 20,
+            "con": "人员列表",
+            "conUrl": "plist"
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "parentCon": "起重机械管理",
+        "parentUrl": "lift",
+        "childCons": [
+          {
+            "id": 22,
+            "con": "机械信息列表",
+            "conUrl": "llist"
+          },
+          {
+            "id": 23,
+            "con": "机械备案列表",
+            "conUrl": "record"
+          },
+          {
+            "id": 24,
+            "con": "安拆告知列表",
+            "conUrl": "dismantle"
+          },
+          {
+            "id": 25,
+            "con": "使用登记列表",
+            "conUrl": "register"
+          },
+          {
+            "id": 26,
+            "con": "授权列表",
+            "conUrl": "authorize"
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "parentCon": "项目管理",
+        "parentUrl": "project",
+        "childCons": [
+          {
+            "id": 28,
+            "con": "项目列表",
+            "conUrl": "list"
+          },
+          {
+            "id": 29,
+            "con": "标段列表",
+            "conUrl": "sectionlist"
+          },
+          {
+            "id": 30,
+            "con": "危大工程",
+            "conUrl": "danger"
+          },
+          {
+            "id": 31,
+            "con": "监控设备",
+            "conUrl": "monitoring"
+          },
+          {
+            "id": 32,
+            "con": "标准化工地",
+            "conUrl": "standard"
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "parentCon": "审批管理",
+        "parentUrl": "approve",
+        "childCons": [
+          {
+            "id": 34,
+            "con": "审批内容列表",
+            "conUrl": "alist"
+          },
+          {
+            "id": 35,
+            "con": "审批人员调整",
+            "conUrl": "personadjust"
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "parentCon": "安全检查",
+        "parentUrl": "security",
+        "childCons": [
+          {
+            "id": 37,
+            "con": "机构检查",
+            "conUrl": "inspection"
+          },
+          {
+            "id": 38,
+            "con": "企业自检",
+            "conUrl": "selfinspeciton"
+          },
+          {
+            "id": 39,
+            "con": "问题列表",
+            "conUrl": "problem"
+          },
+          {
+            "id": 40,
+            "con": "问题库管理",
+            "conUrl": "problemstore"
+          }
+        ]
+      },
+      {
+        "id": 41,
+        "parentCon": "数据统计",
+        "parentUrl": "statistics",
+        "childCons": [
+          {
+            "id": 42,
+            "con": "平台数据统计",
+            "conUrl": "flatform"
+          },
+          {
+            "id": 43,
+            "con": "企业统计",
+            "conUrl": "scompny"
+          },
+          {
+            "id": 44,
+            "con": "机构统计",
+            "conUrl": "sorganization"
+          },
+          {
+            "id": 45,
+            "con": "项目统计",
+            "conUrl": "sproject"
+          },
+          {
+            "id": 46,
+            "con": "人员统计",
+            "conUrl": "sperson"
+          },
+          {
+            "id": 47,
+            "con": "安全检查统计",
+            "conUrl": "ssecturity"
+          },
+          {
+            "id": 48,
+            "con": "问题统计",
+            "conUrl": "sproblem"
+          },
+          {
+            "id": 49,
+            "con": "起重机械统计",
+            "conUrl": "slift"
+          },
+          {
+            "id": 50,
+            "con": "标准化统计",
+            "conUrl": "sstandard"
+          },
+          {
+            "id": 51,
+            "con": "危大工程统计",
+            "conUrl": "sdanger"
+          },
+          {
+            "id": 52,
+            "con": "审批数据统计",
+            "conUrl": "sapprove"
+          }
+        ]
+      }
+    ]
+  }

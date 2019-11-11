@@ -15,16 +15,16 @@
     </div>
     <el-table :data="items" border style="width: 100%">
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="title" label="标题" width="180"></el-table-column>
-      <el-table-column prop="author" label="作者" width="120"></el-table-column>
-      <el-table-column label="内容" width="330">
+      <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="author" label="作者"></el-table-column>
+      <el-table-column label="内容">
         <template slot-scope="scope">
           <div>{{scope.row.content}}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" width="160"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="createTime" label="创建时间"></el-table-column>
+      <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+      <el-table-column label="操作" width="210">
         <template slot-scope="scope">
           <button
             class="btn btn-sm btn-primary mr-2 text-white"
@@ -49,10 +49,10 @@
 </template>
 
 <script>
-import Pagination from "./pagination.vue";
-import Check from "./xinwen_check.vue";
-import Editor from "./xinwen_edit.vue";
-import Add from "./xinwen_add.vue";
+import Pagination from "../pagination.vue";
+import Check from "./news_check.vue";
+import Editor from "./news_edit.vue";
+import Add from "./news_add.vue";
 // import Vue from 'vue'
 
 export default {

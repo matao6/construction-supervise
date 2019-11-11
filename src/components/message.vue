@@ -1,6 +1,6 @@
 <template>
   <div class="m_msg">
-      test message撒扩大解放螺丝钉解放上空的飞机流口水的十六的客服极乐世界的分类收集东方科技 template---{{id}}
+      test message template---{{id}}
   </div>
 </template>
 

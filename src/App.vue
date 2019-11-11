@@ -19,17 +19,13 @@
               <a class="nav-link" href="javascript:;" v-on:click="showmsg" mid="2">消息</a>
             </li>
             <li class="nav-item">
-              <el-dropdown>
+              <el-dropdown @command="m_quit">
                 <span class="nav-link el-dropdown-link">
-                  下拉菜单
+                  个人中心
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu trigger="click" slot="dropdown">
-                  <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">蚵仔煎</el-dropdown-item>
+                  <el-dropdown-item>退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </li>
@@ -90,6 +86,7 @@ export default {
     change: function() {
       this.tag = !this.tag;
     },
+    // 查看
     showmsg: function(event) {
       // console.log(event.target.getAttribute('mid'))
       const h = this.$createElement;
@@ -111,6 +108,20 @@ export default {
           //   message: '已取消删除'
           // })
         });
+    },
+    // 退出登录
+    m_quit() {
+      this.$confirm("将要退出登录？", "提示", {
+        confirmButtonText: "确定",
+        cancleButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          sessionStorage.setItem("showIndex", false);
+          sessionStorage.removeItem('auth');
+          window.location.href = this.GLOBAL.m_testUrl + "/login";
+        })
+        .catch(() => {});
     }
   },
   created: function() {
@@ -121,13 +132,13 @@ export default {
     } else {
       if (location.href.split("/")[3] == "login") {
       } else {
-        window.location.href = "http://localhost:8080/login";
+        window.location.href = "/login";
       }
     }
     //
     var that = this;
     this.axios
-      .get("/json/test.json")
+      .get("/json/navs.json")
       .then(function(response) {
         that.navs = response.data.navs;
       })

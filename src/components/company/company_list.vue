@@ -111,8 +111,8 @@
 </template>
 
 <script>
-import Pagination from "./pagination.vue";
-import Check from "./check.vue";
+import Pagination from "../pagination.vue";
+import Check from "../company_check.vue";
 
 export default {
   name: "list",

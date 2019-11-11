@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Wangeditor from "./wangeditor";
+import Wangeditor from "../wangeditor.vue";
 
 export default {
   name: "xinwen_check",

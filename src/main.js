@@ -38,20 +38,12 @@ Vue.prototype.GLOBAL = globalVariable
 
 const routes = [
   {
-    path: '/qiye/qimanage',
-    component: (resolve) => require(['./components/list.vue'],resolve)
+    path: '/company/clist',
+    component: (resolve) => require(['./components/company/company_list.vue'],resolve)
   },
   {
-    path: '/qiye/check',
-    component: (resolve) => require(['./components/check.vue'], resolve)
-  },
-  {
-    path: '/qiye/edit',
-    component: (resolve) => require(['./components/edit.vue'],resolve)
-  },
-  {
-    path: '/xinwen/xinset',
-    component: (resolve) => require(['./components/xinwen_list.vue'],resolve)
+    path: '/system/news',
+    component: (resolve) => require(['./components/news/news_list.vue'],resolve)
   },
   {
     path: '/login',

@@ -11,7 +11,6 @@
           <div class="card-body">
             <h5 class="card-title text-primary">登录到控制台</h5>
             <div class="card-text">
-              <form>
                 <div class="form-group">
                   <el-input v-model.trim="username" placeholder="Enter account" />
                 </div>
@@ -31,9 +30,8 @@
                   ></slide-verify>
                 </div>
                 <div class="text-center">
-                  <el-button type="primary" :loading="isLoading" @click="mLogin">确认登录</el-button>
+                  <el-button type="primary" :loading="isLoading" @click="mLogin">{{isLoading?'登录中...':'登录'}}</el-button>
                 </div>
-              </form>
             </div>
           </div>
         </div>
@@ -65,6 +63,15 @@ export default {
       // 滑动验证
       slideVerify: false
     };
+  },
+  created(){
+    let that = this;
+    document.onkeyup=function(e){
+      let key = window.event.keyCode;
+      if(key == 13){
+        that.mLogin();
+      }
+    }
   },
   methods: {
     mLogin: function() {
@@ -105,7 +112,6 @@ export default {
       })
         .then(function(response) {
           // console.log(response);
-          that.isLoading = false;
           if (response.data.code == 200) {
             that.$message({
               message: response.data.message,
@@ -114,7 +120,8 @@ export default {
             });
             sessionStorage.setItem("showIndex", true);
             sessionStorage.setItem("auth", response.data.data.token);
-            location.href="http://localhost:8080/xinwen/xinset";
+            location.href= that.GLOBAL.m_testUrl+"/system/news";
+            that.isLoading = false;
           } else {
             sessionStorage.setItem("showIndex", false);
             that.$message({
@@ -161,6 +168,7 @@ export default {
     }
   },
   mounted: function() {
+    // 修改滑动验证组件样式
     document.querySelector(".slide-verify-slider").style.width = 339 + "px";
     document.querySelector(".slide-verify").style.width = 339 + "px";
     document.querySelectorAll("canvas")[0].style.display = "none";
