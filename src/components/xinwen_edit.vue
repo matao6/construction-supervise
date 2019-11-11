@@ -79,6 +79,7 @@ export default {
     }
   },
   methods: {
+    // 提交数据
     m_submit(event) {
       this.id = document.querySelector("#h_id").value;
       if (this.id) {
@@ -113,15 +114,16 @@ export default {
                   type: "success"
                 });
                 setTimeout(() => {
-                  // 刷新祖父级组件
-                  // window.location.reload();
-                  document.querySelector("#h_refresh").value=false;
-                  document.querySelector("#h_refresh").dispatchEvent(new Event('input'));
+                  // 根据refresh tag刷新祖父级组件
+                  document.querySelector("#h_refresh").value = false;
+                  document
+                    .querySelector("#h_refresh")
+                    .dispatchEvent(new Event("input"));
                 }, 800);
               } else {
                 that.$message({
                   message: response.data.message,
-                  type: "success"
+                  type: "error"
                 });
               }
             }
