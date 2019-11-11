@@ -4,6 +4,8 @@ import ElementUI from 'element-ui'
 import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import SlideVerify from 'vue-monoplasty-slide-verify';
+
 // 引用全局变量
 import globalVariable from './assets/js/global_variable.js'
 // 引用全局函数
@@ -23,6 +25,8 @@ import Login from './components/login.vue'
 Vue.use(VueRouter)
 Vue.use(VueAxios,axios)
 Vue.use(ElementUI)
+// 验证
+Vue.use(SlideVerify);
 // 全局函数
 Vue.use(globalFun)
 
