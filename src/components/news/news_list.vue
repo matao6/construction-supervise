@@ -49,10 +49,11 @@
 </template>
 
 <script>
-import Pagination from "../pagination.vue";
+import Pagination from "../common/pagination.vue";
 import Check from "./news_check.vue";
 import Editor from "./news_edit.vue";
 import Add from "./news_add.vue";
+import {showLoading,hideLoading} from "../../assets/js/loading.js"
 // import Vue from 'vue'
 
 export default {
@@ -176,19 +177,15 @@ export default {
       })
         .then(() => {
           // 加载浮层
-          const loading = this.$loading({
-            lock: true,
-            text: "Loading",
-            spinner: "el-icon-loading",
-            background: "rgba(0, 0, 0, 0.7)"
-          });
+          showLoading();
           // 删除接口
           this.axios({
             url: that.GLOBAL.m_mainUrl + "/webnews/webnews/" + m_id,
+            headers: { auth: sessionStorage.getItem("auth") },
             method: "delete"
           })
             .then(function(response) {
-              loading.close();
+              hideLoading();
               if (response.status == 200) {
                 that.$message({
                   message: response.data.message,
@@ -203,7 +200,7 @@ export default {
               }
             })
             .catch(function(error) {
-              loading.close();
+              hideLoading();
               console.log(error);
             });
         })
@@ -213,16 +210,21 @@ export default {
     changePage(page) {
       var that = this;
       // console.log(page);
-      this.axios
-        .get(that.GLOBAL.m_mainUrl + "/webnews/searchLists", {
-          params: {
-            page: page,
-            title: that.input,
-            size: that.size
-          }
-        })
+      // 加载浮层
+      showLoading();
+      this.axios({
+        url: that.GLOBAL.m_mainUrl + "/webnews/searchLists",
+        method: "get",
+        headers: { auth: sessionStorage.getItem("auth") },
+        params: {
+          page: page,
+          title: that.input,
+          size: that.size
+        }
+      })
         .then(function(response) {
           // console.log(response);
+          hideLoading();
           if (response.status == 200) {
             let mData = response.data.data;
             that.items = mData.content;
@@ -232,6 +234,7 @@ export default {
           }
         })
         .catch(function(error) {
+          hideLoading()
           // 请求失败处理
           console.log(error);
         });
@@ -239,13 +242,15 @@ export default {
     // 搜索标题
     searchInfo() {
       var that = this;
-      this.axios
-        .get(that.GLOBAL.m_mainUrl + "/webnews/searchLists", {
-          params: {
-            title: that.input,
-            size: that.size
-          }
-        })
+      this.axios({
+        url: that.GLOBAL.m_mainUrl + "/webnews/searchLists",
+        method: "get",
+        headers: { auth: sessionStorage.getItem("auth") },
+        params: {
+          title: that.input,
+          size: that.size
+        }
+      })
         .then(function(response) {
           if (response) {
             if (response.status == 200) {
@@ -264,21 +269,17 @@ export default {
     }
   },
   created: function() {
-    // console.log(Vue.version)
+    // console.log('this',this)
     // 加载浮层
-    const loading = this.$loading({
-      lock: true,
-      text: "Loading",
-      spinner: "el-icon-loading",
-      background: "rgba(0, 0, 0, 0.7)"
-    });
+    showLoading();
     var that = this;
     this.axios({
+      url: that.GLOBAL.m_mainUrl + "/webnews/lists",
       method: "get",
-      url: that.GLOBAL.m_mainUrl + "/webnews/lists"
+      headers: { auth: sessionStorage.getItem("auth") }
     })
       .then(function(response) {
-        loading.close();
+        hideLoading();
         // console.log(response);
         if (response.status == 200) {
           let mData = response.data.data;
@@ -290,8 +291,8 @@ export default {
       })
       .catch(function(error) {
         // 请求失败处理
-        loading.close();
-        console.log(error);
+        hideLoading();
+        console.log(JSON.stringify(error));
       });
   }
 };

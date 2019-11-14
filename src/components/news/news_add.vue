@@ -19,6 +19,7 @@
 
 <script>
 import E from "wangeditor";
+import {showLoading,hideLoading} from "../../assets/js/loading.js"
 
 export default {
   name: "xinwen_edit",
@@ -63,12 +64,7 @@ export default {
   methods: {
     m_submit(event) {
       // 加载浮层
-      const loading = this.$loading({
-        lock: true,
-        text: "Loading",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)"
-      });
+      showLoading();
       // 传值
       var that = this;
       this.$axios({
@@ -82,7 +78,7 @@ export default {
         }
       })
         .then(function(response) {
-          loading.close();
+          hideLoading();
           if (response) {
             if (response.status == 200) {
               // console.log(response);
@@ -107,6 +103,7 @@ export default {
           }
         })
         .catch(error => {
+          hideLoading();
           console.log(error);
         });
     }

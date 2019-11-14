@@ -20,7 +20,7 @@
             </li>
             <li class="nav-item">
               <el-dropdown @command="m_quit">
-                <span class="nav-link el-dropdown-link">
+                <span class="nav-link el-dropdown-link" style="font-size: 16px;">
                   个人中心
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>

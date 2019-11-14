@@ -121,7 +121,6 @@ export default {
             sessionStorage.setItem("showIndex", true);
             sessionStorage.setItem("auth", response.data.data.token);
             location.href= that.GLOBAL.m_testUrl+"/system/news";
-            that.isLoading = false;
           } else {
             sessionStorage.setItem("showIndex", false);
             that.$message({
@@ -129,6 +128,7 @@ export default {
               duration: 2000,
               type: "error"
             });
+            that.isLoading = false;
           }
         })
         .catch(function(error) {

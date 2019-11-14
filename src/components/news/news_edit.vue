@@ -35,8 +35,11 @@ export default {
     this.id = document.querySelector("#h_id").value;
     if (this.id) {
       var that = this;
-      this.$axios
-        .get(that.GLOBAL.m_mainUrl + "/webnews/webnews/" + that.id)
+      this.$axios({
+        url: that.GLOBAL.m_mainUrl + "/webnews/webnews/" + that.id,
+        method: "get",
+        headers: { auth: sessionStorage.getItem("auth") }
+      })
         .then(function(response) {
           // console.log(response);
           that.title = response.data.data.title;
@@ -86,7 +89,7 @@ export default {
         // 加载浮层
         const loading = this.$loading({
           lock: true,
-          text: "Loading",
+          text: "加载中...",
           spinner: "el-icon-loading",
           background: "rgba(0, 0, 0, 0.7)"
         });
@@ -95,6 +98,7 @@ export default {
         this.$axios({
           url: that.GLOBAL.m_mainUrl + "/webnews/webnews/" + that.id,
           method: "put",
+          headers: { auth: sessionStorage.getItem("auth") },
           params: {
             id: that.id,
             title: that.title,

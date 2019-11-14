@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Wangeditor from "../wangeditor.vue";
+import Wangeditor from "../common/wangeditor.vue";
 
 export default {
   name: "xinwen_check",
@@ -32,8 +32,10 @@ export default {
     this.id = document.querySelector("#h_id").value;
     if (this.id) {
       var that = this;
-      this.$axios
-        .get(that.GLOBAL.m_mainUrl + "/webnews/webnews" + "/" + that.id)
+      this.$axios({
+        url: that.GLOBAL.m_mainUrl + "/webnews/webnews" + "/" + that.id,
+        headers: { auth: sessionStorage.getItem("auth") }
+      })
         .then(function(response) {
           //   console.log(response);
           that.item = response.data.data;

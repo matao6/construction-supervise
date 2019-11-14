@@ -7,7 +7,7 @@
           <tbody>
             <tr>
               <th class="table-secondary">账号ID</th>
-              <td >{{item.companyId}}</td>
+              <td>{{item.companyId}}</td>
               <th class="table-secondary">登录账号</th>
               <td th:text="${account.getCompanyEmail()}"></td>
               <th class="table-secondary">账户状态</th>
@@ -50,10 +50,10 @@
               <th>操作</th>
             </tr>
             <tr>
-              <td ></td>
+              <td></td>
               <td></td>
               <td>
-                <img/>
+                <img />
               </td>
               <td></td>
               <td></td>
@@ -92,37 +92,38 @@
 </template>
 
 <script>
-
 export default {
-  name: 'check',
+  name: "check",
   data: function() {
     return {
       id: null,
       item: {
-        companyId: '加载中...',
-        companyName: '加载中...',
-        responsiblePersonName: '加载中...',
-        contact: '加载中...',
-        companyAddress: '加载中...'
+        companyId: "加载中...",
+        companyName: "加载中...",
+        responsiblePersonName: "加载中...",
+        contact: "加载中...",
+        companyAddress: "加载中..."
       }
-    }
+    };
   },
-  created: function(){
-    this.id=document.querySelector('#h_id').value;
-    if(this.id){
+  created: function() {
+    this.id = document.querySelector("#h_id").value;
+    if (this.id) {
       var that = this;
-      this.$axios
-        .get(that.GLOBAL.m_mainUrl+'/company/info',{
-          params:{
-            companyId: that.id
-          }
-        })
-        .then(function(response){
+      this.$axios({
+        url: that.GLOBAL.m_mainUrl + "/company/info",
+        method: "get",
+        headers: { auth: sessionStorage.getItem("auth") },
+        params: {
+          companyId: that.id
+        }
+      })
+        .then(function(response) {
           that.item = response.data.data;
         })
-        .catch((error)=>{
-          console.log(error)
-        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

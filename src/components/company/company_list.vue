@@ -1,7 +1,13 @@
 <template>
   <div class="table-responsive">
-    <div class="" style="padding: 15px;">
-      <el-input v-model="input" clearable size="medium" placeholder="请输入企业名称" style="width: 180px; display: inline-block;">
+    <div class style="padding: 15px;">
+      <el-input
+        v-model="input"
+        clearable
+        size="medium"
+        placeholder="请输入企业名称"
+        style="width: 180px; display: inline-block;"
+      >
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
       <el-button type="primary" size="medium" style="margin-left: 15px;" @click="searchInfo">搜索</el-button>
@@ -17,26 +23,20 @@
             class="btn btn-sm btn-primary mr-2 text-white"
             v-bind:mid="scope.row.companyId"
             @click="showCheck"
-          >
-            查看
-          </button>
-          <button
-            class="btn btn-sm btn-warning mr-2"
-            v-bind:mid="scope.row.companyId"
-          >
-            编辑
-          </button>
-          <button
-            class="btn btn-sm btn-danger mr-2"
-            v-on:click="open"
-          >
-            删除
-          </button>
+          >查看</button>
+          <button class="btn btn-sm btn-warning mr-2" v-bind:mid="scope.row.companyId">编辑</button>
+          <button class="btn btn-sm btn-danger mr-2" v-on:click="open">删除</button>
         </template>
       </el-table-column>
     </el-table>
     <input type="hidden" name id="h_id" />
-    <Pagination v-show="currentPage" :currentPage="currentPage" :total="total" :size="size" @changePage="changePage"></Pagination>
+    <Pagination
+      v-show="currentPage"
+      :currentPage="currentPage"
+      :total="total"
+      :size="size"
+      @changePage="changePage"
+    ></Pagination>
     <!-- <table class="table table-bordered">
       <thead>
         <tr>
@@ -106,13 +106,13 @@
         </tr>
         
       </tfoot>
-    </table> -->
+    </table>-->
   </div>
 </template>
 
 <script>
-import Pagination from "../pagination.vue";
-import Check from "../company_check.vue";
+import Pagination from "../common/pagination.vue";
+import Check from "./company_check.vue";
 
 export default {
   name: "list",
@@ -127,7 +127,7 @@ export default {
       // 本地href
       nowRouter: location.href,
       // el-input
-      input: '',
+      input: "",
       // key
       key: 1
     };
@@ -140,28 +140,28 @@ export default {
     Check
   },
   methods: {
-    showCheck(event){
-      document.querySelector('#h_id').value=event.target.getAttribute('mid');
+    showCheck(event) {
+      document.querySelector("#h_id").value = event.target.getAttribute("mid");
       const h = this.$createElement;
       var that = this;
       this.$msgbox({
-        title: '查看',
-        message: h(Check, {key: that.key++}),
+        title: "查看",
+        message: h(Check, { key: that.key++ }),
         showCancelButton: false,
         showConfirmButton: false
       })
-      .then(action=>{
-        this.$message({
-          type: 'info',
-          message: 'action: '+action
+        .then(action => {
+          this.$message({
+            type: "info",
+            message: "action: " + action
+          });
         })
-      })
-      .catch(() => {
-        // this.$message({
-        //   type: 'info',
-        //   message: '已取消删除'
-        // })
-      })
+        .catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消删除'
+          // })
+        });
     },
     open() {
       this.$confirm("确定删除吗?", "提示", {
@@ -175,12 +175,13 @@ export default {
     changePage(page) {
       var that = this;
       // console.log(page);
-      this.axios
-        .get(that.GLOBAL.m_mainUrl+"/company/list", {
-          params: {
-            page: page
-          }
-        })
+      this.axios({
+        url: that.GLOBAL.m_mainUrl + "/company/list",
+        headers: { auth: sessionStorage.getItem("auth") },
+        params: {
+          page: page
+        }
+      })
         .then(function(response) {
           let mData = response.data.data;
           that.items = mData.content;
@@ -196,12 +197,13 @@ export default {
     searchInfo() {
       var that = this;
       // console.log(page);
-      this.axios
-        .get(that.GLOBAL.m_mainUrl+"/company/list", {
-          params: {
-            companyName: that.input
-          }
-        })
+      this.axios({
+        url: that.GLOBAL.m_mainUrl + "/company/list",
+        headers: { auth: sessionStorage.getItem("auth") },
+        params: {
+          companyName: that.input
+        }
+      })
         .then(function(response) {
           let mData = response.data.data;
           that.items = mData.content;
@@ -219,7 +221,10 @@ export default {
     var that = this;
     this.axios
       // .get("/json/test.json")
-      .get(that.GLOBAL.m_mainUrl+"/company/list")
+      ({
+        url:that.GLOBAL.m_mainUrl + "/company/list",
+        headers: { auth: sessionStorage.getItem("auth") }
+        })
       .then(function(response) {
         let mData = response.data.data;
         that.items = mData.content;
