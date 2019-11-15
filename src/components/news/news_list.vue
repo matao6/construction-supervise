@@ -86,8 +86,8 @@ export default {
     Editor
   },
   watch: {
-    // 从子组件xinwen_edit中，监控refresh tag无刷新获取获取数据
-    refresh(val) {
+    // 从子组件news_edit中，监控refresh tag无刷新获取获取数据
+    refresh: function(newval, oldval) {
       var now = this.refresh;
       // console.log("watch1", now);
       if (now == "false") {
@@ -223,7 +223,7 @@ export default {
         }
       })
         .then(function(response) {
-          // console.log(response);
+          console.log(response);
           hideLoading();
           if (response.status == 200) {
             let mData = response.data.data;
@@ -231,6 +231,9 @@ export default {
             that.currentPage = mData.pageable.pageNumber + 1;
             that.total = mData.totalElements;
             that.size = mData.size;
+            if(mData.totalPages<page){
+              that.changePage(mData.totalPages);
+            }
           }
         })
         .catch(function(error) {
@@ -241,6 +244,7 @@ export default {
     },
     // 搜索标题
     searchInfo() {
+      showLoading();
       var that = this;
       this.axios({
         url: that.GLOBAL.m_mainUrl + "/webnews/searchLists",
@@ -252,6 +256,7 @@ export default {
         }
       })
         .then(function(response) {
+          hideLoading();
           if (response) {
             if (response.status == 200) {
               let mData = response.data.data;

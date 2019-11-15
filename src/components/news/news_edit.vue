@@ -119,6 +119,7 @@ export default {
                 });
                 setTimeout(() => {
                   // 根据refresh tag刷新祖父级组件
+                  // console.log(1)
                   document.querySelector("#h_refresh").value = false;
                   document
                     .querySelector("#h_refresh")

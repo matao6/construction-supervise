@@ -29,7 +29,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <input type="hidden" name id="h_id" />
+    <input type="hidden" name id="c_id" />
     <Pagination
       v-show="currentPage"
       :currentPage="currentPage"
@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     showCheck(event) {
-      document.querySelector("#h_id").value = event.target.getAttribute("mid");
+      document.querySelector("#c_id").value = event.target.getAttribute("mid");
       const h = this.$createElement;
       var that = this;
       this.$msgbox({
@@ -179,7 +179,9 @@ export default {
         url: that.GLOBAL.m_mainUrl + "/company/list",
         headers: { auth: sessionStorage.getItem("auth") },
         params: {
-          page: page
+          page: page,
+          companyName: that.input,
+          size: that.size
         }
       })
         .then(function(response) {

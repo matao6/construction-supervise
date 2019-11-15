@@ -46,6 +46,14 @@ const routes = [
     component: (resolve) => require(['./components/news/news_list.vue'],resolve)
   },
   {
+    path: '/company/accident',
+    component: (resolve) => require(['./components/company/company_accident.vue'],resolve)
+  },
+  {
+    path: '/statistics/sopinion',
+    component: (resolve) => require(['./components/statistics/statistics_opinion.vue'],resolve)
+  },
+  {
     path: '/login',
     components: {
       login: Login
