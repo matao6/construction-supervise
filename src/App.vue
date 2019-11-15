@@ -35,7 +35,7 @@
       <div class="main-inner h-100">
         <div class="main-sidebar-wrapper border-right p-2">
           <ul class="nav flex-column">
-            <div v-for="item in navs" v-bind:key="item.id" v-show="item.parentUrl === parentTab">
+            <!-- <div v-for="item in navs" v-bind:key="item.id" v-show="item.parentUrl === parentTab">
               <router-link
                 v-bind:to="'/'+item.parentUrl+'/'+child.conUrl"
                 v-for="child in item.childCons"
@@ -45,7 +45,24 @@
                   <a class="nav-link">{{child.con}}</a>
                 </li>
               </router-link>
-            </div>
+            </div>-->
+            <el-menu menu-trigger="hover" mode="horizontal" text-color="#303133" active-text-color="#303133" background-color="white">
+              <div v-for="item in navs" v-bind:key="item.id" v-show="item.parentUrl === parentTab">
+                <router-link
+                  v-bind:to="'/'+item.parentUrl+'/'+child.conUrl"
+                  v-for="child in item.childCons"
+                  v-bind:key="child.id"
+                >
+                  <el-submenu v-if="child.thirdChild" index="1">
+                    <template slot="title">{{child.con}}</template>
+                        <router-link v-for="thirdC in child.thirdChild" :key="thirdC.id" :to="'/'+item.parentUrl+'/'+child.conUrl+'/'+thirdC.conUrl">
+                          <el-menu-item index="2">{{thirdC.con}} </el-menu-item>
+                        </router-link>
+                  </el-submenu>
+                  <el-menu-item v-else index="1">{{child.con}}</el-menu-item>
+                </router-link>
+              </div>
+            </el-menu>
           </ul>
         </div>
         <div class="main-body p-2 h-100 overflow-auto">
@@ -118,7 +135,7 @@ export default {
       })
         .then(() => {
           sessionStorage.setItem("showIndex", false);
-          sessionStorage.removeItem('auth');
+          sessionStorage.removeItem("auth");
           window.location.href = this.GLOBAL.m_testUrl + "/login";
         })
         .catch(() => {});
