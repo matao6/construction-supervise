@@ -31,11 +31,20 @@
         </template>
       </el-table-column>
     </el-table>
-    <Pagination v-show="currentPage" :currentPage="currentPage" :total="total" :size="size"></Pagination>
+    <input type="hidden" name id="h_id" />
+    <input type="hidden" v-model="refresh" id="h_refresh" />
+    <Pagination
+      v-show="currentPage"
+      :currentPage="currentPage"
+      :total="total"
+      :size="size"
+      @changePage="changePage"
+    ></Pagination>
   </div>
 </template>
 
 <script>
+import Check from "./accident_check.vue"
 import Pagination from "../common/pagination.vue";
 import { showLoading, hideLoading } from "../../assets/js/loading.js";
 
@@ -50,11 +59,35 @@ export default {
       // 分页数据
       currentPage: 0,
       total: 0,
-      size: 5
+      size: 5,
+      //
+      refresh: true
     };
   },
   components: {
     Pagination
+  },
+  watch: {
+    // 从子组件中，监控refresh tag无刷新获取获取数据
+    refresh: function(newval, oldval) {
+      var now = this.refresh;
+      // console.log("watch1", now);
+      if (now == "false") {
+        // console.log("watch2", now);
+        var getPage = document.querySelector(".el-pager .number.active")
+          .innerText;
+        // 刷新当前列表
+        this.changePage(getPage);
+        // 关闭弹框
+        $(".v-modal").click();
+        // 重置refresh tag
+        this.refresh = true;
+      }
+
+      // this.$nextTick(() => {
+      //   this.refresh = true;
+      // });
+    }
   },
   methods: {
     searchInfo() {
@@ -89,11 +122,10 @@ export default {
     // 跳转分页
     changePage(page) {
       var that = this;
-      // console.log(page);
       // 加载浮层
       showLoading();
       this.axios({
-        url: that.GLOBAL.m_mainUrl + "/webnews/searchLists",
+        url: that.GLOBAL.m_mainUrl + "/accident/lists",
         method: "get",
         headers: { auth: sessionStorage.getItem("auth") },
         params: {
@@ -103,7 +135,7 @@ export default {
         }
       })
         .then(function(response) {
-          console.log(response);
+          // console.log(response);
           hideLoading();
           if (response.status == 200) {
             let mData = response.data.data;
@@ -111,21 +143,72 @@ export default {
             that.currentPage = mData.pageable.pageNumber + 1;
             that.total = mData.totalElements;
             that.size = mData.size;
-            if(mData.totalPages<page){
+            if (mData.totalPages < page) {
               that.changePage(mData.totalPages);
             }
           }
         })
         .catch(function(error) {
-          hideLoading()
+          hideLoading();
           // 请求失败处理
           console.log(error);
         });
     },
     showAdd() {},
-    showCheck() {},
+    showCheck() {
+      document.querySelector("#h_id").value = event.target.getAttribute("mid");
+      const h = this.$createElement;
+      var that = this;
+      this.$msgbox({
+        title: "查看",
+        message: h(Check, { key: that.key++ }),
+        showCancelButton: false,
+        showConfirmButton: false
+      })
+        .then(action => {})
+        .catch(() => {});
+    },
     showEdit() {},
-    showDel() {}
+    showDel() {
+      var that = this;
+      var m_id = event.target.getAttribute("mid");
+      // console.log(m_id);
+      this.$confirm("确定删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          // 加载浮层
+          showLoading();
+          // 删除接口
+          this.axios({
+            url: that.GLOBAL.m_mainUrl + "/accident/del/" + m_id,
+            headers: { auth: sessionStorage.getItem("auth") },
+            method: "delete"
+          })
+            .then(function(response) {
+              hideLoading();
+              if (response.status == 200) {
+                that.$message({
+                  message: response.data.message,
+                  duration: 2000,
+                  type: "success"
+                });
+                // 根据refresh tag刷新祖父级组件
+                document.querySelector("#h_refresh").value = false;
+                document
+                  .querySelector("#h_refresh")
+                  .dispatchEvent(new Event("input"));
+              }
+            })
+            .catch(function(error) {
+              hideLoading();
+              console.log(error);
+            });
+        })
+        .catch(() => {});
+    }
   },
   mounted() {
     // 加载浮层
