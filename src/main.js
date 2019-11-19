@@ -37,22 +37,37 @@ Vue.prototype.$axios=axios
 Vue.prototype.GLOBAL = globalVariable
 
 const routes = [
+  // 企业列表
   {
     path: '/company/clist',
     component: (resolve) => require(['./components/company/company_list.vue'],resolve)
   },
+  // 新闻公告
   {
     path: '/system/news',
     component: (resolve) => require(['./components/news/news_list.vue'],resolve)
   },
+  // 事故信息
   {
     path: '/company/accident',
-    component: (resolve) => require(['./components/company/company_accident.vue'],resolve)
+    component: (resolve) => require(['./components/company/accident_list.vue'],resolve)
   },
+  // 意见反馈
   {
-    path: '/statistics/sopinion',
-    component: (resolve) => require(['./components/statistics/statistics_opinion.vue'],resolve)
+    path: '/clientserve/sopinion',
+    component: (resolve) => require(['./components/clientserve/opinion_list.vue'],resolve)
   },
+  // 印章管理
+  {
+    path: '/company/clist/csealManage',
+    component: (resolve) => require(['./components/company/seal_list.vue'],resolve)
+  },
+  // 机构列表
+  {
+    path: '/organization/olist',
+    component: (resolve) => require(['./components/organization/organization_list.vue'],resolve)
+  },
+  // 登录
   {
     path: '/login',
     components: {
