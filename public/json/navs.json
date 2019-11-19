@@ -275,10 +275,17 @@
           "id": 52,
           "con": "审批数据统计",
           "conUrl": "sapprove"
-        },
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "parentCon":"客户服务",
+      "parentUrl": "clientserve",
+      "childCons":[
         {
-          "id": 53,
-          "con": "意见反馈统计",
+          "id": 56,
+          "con": "意见反馈",
           "conUrl": "sopinion"
         }
       ]
