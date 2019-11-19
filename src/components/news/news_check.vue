@@ -34,11 +34,14 @@ export default {
       var that = this;
       this.$axios({
         url: that.GLOBAL.m_mainUrl + "/webnews/webnews" + "/" + that.id,
+        method: "get",
         headers: { auth: sessionStorage.getItem("auth") }
       })
         .then(function(response) {
           //   console.log(response);
-          that.item = response.data.data;
+          if (response.data.code == 200) {
+            that.item = response.data.data;
+          }
         })
         .catch(error => {
           console.log(error);

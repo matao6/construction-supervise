@@ -86,7 +86,7 @@ export default {
     Editor
   },
   watch: {
-    // 从子组件news_edit中，监控refresh tag无刷新获取获取数据
+    // 从子组件中，监控refresh tag无刷新获取获取数据
     refresh: function(newval, oldval) {
       var now = this.refresh;
       // console.log("watch1", now);
@@ -223,7 +223,7 @@ export default {
         }
       })
         .then(function(response) {
-          console.log(response);
+          // console.log(response);
           hideLoading();
           if (response.status == 200) {
             let mData = response.data.data;
