@@ -57,13 +57,13 @@ export default {
         headers: { auth: sessionStorage.getItem("auth") }
       })
         .then(function(response) {
-          console.log(response);
+          // console.log(response);
           if (response.data.code == 1) {
             that.item = response.data.data;
           }
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
         });
     }
   }

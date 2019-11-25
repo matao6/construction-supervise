@@ -38,13 +38,13 @@ export default {
         headers: { auth: sessionStorage.getItem("auth") }
       })
         .then(function(response) {
-          //   console.log(response);
-          if (response.data.code == 200) {
+            // console.log(response);
+          if (response.data.code == 100) {
             that.item = response.data.data;
           }
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
         });
     }
   }

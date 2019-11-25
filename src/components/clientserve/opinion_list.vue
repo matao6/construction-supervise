@@ -99,7 +99,7 @@ export default {
             that.items = con.content;
             for (let x in con.content) {
               that.srcList[x] = [];
-              that.srcList[x].push = con.content[x].fbImg;
+              that.srcList[x][0] = con.content[x].fbImg;
             }
             that.currentPage = con.pageable.pageNumber + 1;
             that.total = con.totalElements;
@@ -133,7 +133,7 @@ export default {
             that.items = mData.content;
             for (let x in mData.content) {
               that.srcList[x] = [];
-              that.srcList[x].push = mData.content[x].fbImg;
+              that.srcList[x][0] = mData.content[x].fbImg;
             }
             that.currentPage = mData.pageable.pageNumber + 1;
             that.total = mData.totalElements;
@@ -186,7 +186,7 @@ export default {
           that.items = con.content;
           for (let x in con.content) {
             that.srcList[x] = [];
-            that.srcList[x].push = con.content[x].fbImg;
+            that.srcList[x][0] = con.content[x].fbImg;
           }
           //   for (let index = 0; index < 5; index++) {
           //     that.srcList[index] = [];

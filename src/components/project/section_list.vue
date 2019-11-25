@@ -5,25 +5,29 @@
         v-model="input"
         clearable
         size="medium"
-        placeholder="请输入标题"
+        placeholder="请输入标段名称"
         style="width: 180px; display: inline-block;"
       >
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
       <el-button type="primary" size="medium" style="margin-left: 15px;" @click="searchInfo">搜索</el-button>
-      <el-button type="info" size="medium" style="margin-left: 15px;" @click="showAdd">添加新闻</el-button>
+      <el-button type="info" size="medium" style="margin-left: 15px;" @click="showAdd">添加标段</el-button>
     </div>
     <el-table :data="items" border style="width: 100%">
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="title" label="标题"></el-table-column>
-      <el-table-column prop="author" label="作者"></el-table-column>
-      <el-table-column label="内容">
+      <el-table-column prop="projectName" label="标段名称"></el-table-column>
+      <el-table-column prop="guid" label="服务器ID"></el-table-column>
+      <el-table-column label="状态">
         <template slot-scope="scope">
-          <div>{{scope.row.content}}</div>
+            <el-tag effect="dark" v-if="scope.row.status==1" type="success" size="small">{{scope.row.status}}</el-tag>
+            <el-tag effect="dark" v-if="scope.row.status==2" type="info" size="small">{{scope.row.status}}</el-tag>
+            <el-tag effect="dark" v-if="scope.row.status==3" type="danger" size="small">{{scope.row.status}}</el-tag>
+            <el-tag effect="dark" v-if="scope.row.status==4" type="warning" size="small">{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间"></el-table-column>
-      <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+      <el-table-column prop="cname" label="公司名称"></el-table-column>
+      <el-table-column prop="starttimeTxt" label="开始时间"></el-table-column>
+      <el-table-column prop="endtimeTxt" label="结束时间"></el-table-column>
       <el-table-column label="操作" width="210">
         <template slot-scope="scope">
           <button
@@ -50,9 +54,9 @@
 
 <script>
 import Pagination from "../common/pagination.vue";
-import Check from "./news_check.vue";
-import Editor from "./news_edit.vue";
-import Add from "./news_add.vue";
+import Check from "./section_check.vue";
+import Editor from "./section_edit.vue";
+import Add from "./section_add.vue";
 import {showLoading,hideLoading} from "../../assets/js/loading.js"
 // import Vue from 'vue'
 
@@ -65,7 +69,7 @@ export default {
       // 分页数据
       currentPage: 0,
       total: 0,
-      size: 5,
+      size: 10,
       // 本地href
       nowRouter: location.href,
       // el-input
@@ -198,8 +202,7 @@ export default {
               }
             })
             .catch(()=>{
-              // hideLoading();
-              // console.log(error);
+            //   console.log(error);
             });
         })
         .catch(() => {});
@@ -211,12 +214,12 @@ export default {
       // 加载浮层
       showLoading();
       this.axios({
-        url: that.GLOBAL.m_mainUrl + "/webnews/searchLists",
+        url: that.GLOBAL.m_mainUrl + "/project/searchPageProjects",
         method: "get",
         headers: { auth: sessionStorage.getItem("auth") },
         params: {
           page: page,
-          title: that.input,
+          projectName: that.input,
           size: that.size
         }
       })
@@ -224,7 +227,7 @@ export default {
           // console.log(response);
           hideLoading();
           if (response.status == 200) {
-            let mData = response.data.data;
+            let mData = response.data.data.page;
             that.items = mData.content;
             that.currentPage = mData.pageable.pageNumber + 1;
             that.total = mData.totalElements;
@@ -236,7 +239,7 @@ export default {
         })
         .catch(()=>{
           // 请求失败处理
-          // console.log(error);
+        //   console.log(error);
         });
     },
     // 搜索标题
@@ -244,11 +247,11 @@ export default {
       showLoading();
       var that = this;
       this.axios({
-        url: that.GLOBAL.m_mainUrl + "/webnews/searchLists",
+        url: that.GLOBAL.m_mainUrl + "/project/searchPageProjects",
         method: "get",
         headers: { auth: sessionStorage.getItem("auth") },
         params: {
-          title: that.input,
+          projectName: that.input,
           size: that.size
         }
       })
@@ -256,7 +259,7 @@ export default {
           hideLoading();
           if (response) {
             if (response.status == 200) {
-              let mData = response.data.data;
+              let mData = response.data.data.page;
               that.items = mData.content;
               that.currentPage = mData.pageable.pageNumber + 1;
               that.total = mData.totalElements;
@@ -266,7 +269,7 @@ export default {
         })
         .catch(()=>{
           // 请求失败处理
-          // console.log(error);
+        //   console.log(error);
         });
     }
   },
@@ -276,7 +279,7 @@ export default {
     showLoading();
     var that = this;
     this.axios({
-      url: that.GLOBAL.m_mainUrl + "/webnews/lists",
+      url: that.GLOBAL.m_mainUrl + "/project/searchPageProjects",
       method: "get",
       headers: { auth: sessionStorage.getItem("auth") }
     })
@@ -284,7 +287,7 @@ export default {
         hideLoading();
         // console.log(response);
         if (response.status == 200) {
-          let mData = response.data.data;
+          let mData = response.data.data.page;
           that.items = mData.content;
           that.currentPage = mData.pageable.pageNumber + 1;
           that.total = mData.totalElements;
