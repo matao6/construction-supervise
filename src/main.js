@@ -23,7 +23,7 @@ import Login from './components/login.vue'
 
 // all register
 Vue.use(VueRouter)
-Vue.use(VueAxios,axios)
+Vue.use(VueAxios, axios)
 Vue.use(ElementUI)
 // 验证
 Vue.use(SlideVerify);
@@ -32,7 +32,7 @@ Vue.use(globalFun)
 
 Vue.config.productionTip = false
 // 让子组件也可以使用axios
-Vue.prototype.$axios=axios
+Vue.prototype.$axios = axios
 // 全局引用
 Vue.prototype.GLOBAL = globalVariable
 
@@ -40,32 +40,37 @@ const routes = [
   // 企业列表
   {
     path: '/company/clist',
-    component: (resolve) => require(['./components/company/company_list.vue'],resolve)
+    component: (resolve) => require(['./components/company/company_list.vue'], resolve)
   },
   // 新闻公告
   {
     path: '/system/news',
-    component: (resolve) => require(['./components/news/news_list.vue'],resolve)
+    component: (resolve) => require(['./components/news/news_list.vue'], resolve)
   },
   // 事故信息
   {
     path: '/company/accident',
-    component: (resolve) => require(['./components/company/accident_list.vue'],resolve)
+    component: (resolve) => require(['./components/company/accident_list.vue'], resolve)
   },
   // 意见反馈
   {
     path: '/clientserve/sopinion',
-    component: (resolve) => require(['./components/clientserve/opinion_list.vue'],resolve)
+    component: (resolve) => require(['./components/clientserve/opinion_list.vue'], resolve)
   },
   // 印章管理
   {
     path: '/company/clist/csealManage',
-    component: (resolve) => require(['./components/company/seal_list.vue'],resolve)
+    component: (resolve) => require(['./components/company/seal_list.vue'], resolve)
   },
   // 机构列表
   {
     path: '/organization/olist',
-    component: (resolve) => require(['./components/organization/organization_list.vue'],resolve)
+    component: (resolve) => require(['./components/organization/organization_list.vue'], resolve)
+  },
+  // 标段列表
+  {
+    path: '/project/sectionlist',
+    component: (resolve) => require(['./components/project/section_list.vue'], resolve)
   },
   // 登录
   {
