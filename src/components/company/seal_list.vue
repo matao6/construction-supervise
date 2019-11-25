@@ -1,12 +1,15 @@
 <template>
   <div class="table-responsive">
     <div class style="padding: 15px;">
+      <el-select v-model="mstatus" clearable placeholder="请选择状态" size="medium">
+        <el-option v-for="item in options" :label="item.label" :value="item.value" :key="item.value"></el-option>
+      </el-select>
       <el-input
         v-model="input"
         clearable
         size="medium"
-        placeholder="请输入标题"
-        style="width: 180px; display: inline-block;"
+        placeholder="请输入印章名称"
+        style="width: 180px; display: inline-block;margin-left:15px;"
       >
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
@@ -16,19 +19,31 @@
     <el-table :data="items" border style="width: 100%">
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
       <el-table-column prop="title" label="印章名称"></el-table-column>
-      <el-table-column prop="status" label="状态"></el-table-column>
+      <el-table-column label="状态">
+        <template slot-scope="scope">
+          <el-tag effect="dark" v-if="scope.row.status==1" type="" size="small">企业上报</el-tag>
+          <el-tag effect="dark" v-if="scope.row.status==2" type="warning" size="small">生成中</el-tag>
+          <el-tag effect="dark" v-if="scope.row.status==3" type="danger" size="small">退回</el-tag>
+          <el-tag effect="dark" v-if="scope.row.status==4" type="success" size="small">已生成</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="undertaking" label="承诺书" width="200">
         <template slot-scope="scope">
-          <el-image :src="scope.row.undertaking" fit="contain"></el-image>
+          <el-image
+            :src="scope.row.undertaking"
+            fit="contain"
+            :preview-src-list="srcList[scope.$index]"
+          ></el-image>
         </template>
       </el-table-column>
       <el-table-column label="印章" width="200">
         <template slot-scope="scope">
-          <el-image :src="scope.row.img" fit="contain"></el-image>
+          <el-image :src="scope.row.img" fit="contain" :preview-src-list="imgList[scope.$index]"></el-image>
         </template>
       </el-table-column>
       <el-table-column prop="pids" label="使用人员"></el-table-column>
-      <el-table-column label="操作" width="210">
+      <el-table-column prop="createTime" label="创建时间"></el-table-column>
+      <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <button
             class="btn btn-sm btn-primary mr-2 text-white"
@@ -36,8 +51,11 @@
             @click="showCheck"
           >查看</button>
           <button class="btn btn-sm btn-warning mr-2" v-bind:mid="scope.row.id" @click="showEdit">编辑</button>
+          <button class="btn btn-sm btn-warning my-2 mr-2" v-if="scope.row.status==1||scope.row.status==3" v-bind:mid="scope.row.id" @click="showAudit">审核</button>
+          <button class="btn btn-sm btn-warning my-2 mr-2" v-if="scope.row.status==2" v-bind:mid="scope.row.id" @click="showUpload">上传</button>
+          <button class="btn btn-sm btn-warning my-2 mr-2" v-if="scope.row.status==4" v-bind:mid="scope.row.id" >重新上传</button>
           <button
-            class="btn btn-sm btn-danger mr-2"
+            class="btn btn-sm btn-danger my-2"
             v-bind:mid="scope.row.id"
             v-on:click="showDel"
           >删除</button>
@@ -45,7 +63,7 @@
       </el-table-column>
     </el-table>
     <input type="hidden" name id="s_id" />
-    <input type="hidden" name id="s_refresh" />
+    <input type="hidden" name id="s_refresh" v-model="refresh"/>
     <Pagination
       v-show="currentPage"
       :currentPage="currentPage"
@@ -57,6 +75,8 @@
 </template>
 
 <script>
+import Upload from "./seal_upload.vue";
+import Audit from "./seal_audit.vue";
 import Check from "./seal_check.vue";
 import Pagination from "../common/pagination.vue";
 import { showLoading, hideLoading } from "../../assets/js/loading.js";
@@ -73,9 +93,19 @@ export default {
       size: 10,
       // el-input
       input: "",
+      mstatus: "",
+      options: [
+        {label:'企业上报',value:1},
+        {label:'生成中',value:2},
+        {label:'退回',value:3},
+        {label:'已生成',value:4}
+      ],
       //
       key: 1,
-      refresh: true
+      refresh: true,
+      // 承诺书和印章的放大查看数组
+      srcList: [],
+      imgList: []
     };
   },
   components: {
@@ -83,15 +113,16 @@ export default {
   },
   watch: {
     // 从子组件中，监控refresh tag无刷新获取获取数据
-    refresh: function(newVal, oldVal) {
+    refresh: function() {
       const now = this.refresh;
+      // console.log('now',now)
       if (now == "false") {
         var getPage = document.querySelector(".el-pager .number.active")
           .innerText;
         // 刷新当前列表
         this.changePage(getPage);
         // 关闭弹框
-        $(".v-modal").click();
+        document.querySelector(".v-modal").click();
         // 重置refresh tag
         this.refresh = true;
       }
@@ -116,17 +147,50 @@ export default {
         if (response.status == 200) {
           let mData = response.data.data;
           that.items = mData.content;
+          for (let x in mData.content) {
+            that.srcList[x] = [];
+            that.srcList[x][0] = mData.content[x].undertaking;
+            that.imgList[x] = [];
+            that.imgList[x][0] = mData.content[x].img;
+          }
+          // console.log(that.srcList)
           that.currentPage = mData.pageable.pageNumber + 1;
           that.total = mData.totalElements;
           that.size = mData.size;
         }
       })
-      .catch(error => {
-        console.log();
+      .catch(() => {
+        // console.log();
       });
   },
   methods: {
     showAdd() {},
+    showUpload(){
+      document.querySelector("#s_id").value = event.target.getAttribute("mid");
+      const h = this.$createElement;
+      const that = this;
+      this.$msgbox({
+        title: "上传",
+        message: h(Upload, { key: that.key++ }),
+        showCancelButton: false,
+        showConfirmButton: false
+      })
+        .then(() => {})
+        .catch(() => {});
+    },
+    showAudit(){
+      document.querySelector("#s_id").value = event.target.getAttribute("mid");
+      const h = this.$createElement;
+      const that = this;
+      this.$msgbox({
+        title: "审核",
+        message: h(Audit, { key: that.key++ }),
+        showCancelButton: false,
+        showConfirmButton: false
+      })
+        .then(() => {})
+        .catch(() => {});
+    },
     showCheck(event) {
       document.querySelector("#s_id").value = event.target.getAttribute("mid");
       const h = this.$createElement;
@@ -137,7 +201,7 @@ export default {
         showCancelButton: false,
         showConfirmButton: false
       })
-        .then(action => {})
+        .then(() => {})
         .catch(() => {});
     },
     showDel(event) {
@@ -163,7 +227,7 @@ export default {
           })
             .then(function(response) {
               hideLoading();
-              if (response.status == 200) {
+              if (response.code == 1) {
                 that.$message({
                   message: response.data.message,
                   duration: 2000,
@@ -176,9 +240,9 @@ export default {
                   .dispatchEvent(new Event("input"));
               }
             })
-            .catch(function(error) {
-              hideLoading();
-              console.log(error);
+            .catch(()=>{
+              // hideLoading();
+              // console.log(error);
             });
         })
         .catch(() => {});
@@ -193,6 +257,7 @@ export default {
         headers: { auth: sessionStorage.getItem("auth") },
         params: {
           title: that.input,
+          status: that.mstatus,
           size: that.size
         }
       })
@@ -202,15 +267,21 @@ export default {
             if (response.status == 200) {
               let mData = response.data.data;
               that.items = mData.content;
+              for (let x in mData.content) {
+                that.srcList[x] = [];
+                that.srcList[x][0] = mData.content[x].undertaking;
+                that.imgList[x] = [];
+                that.imgList[x][0] = mData.content[x].img;
+              }
               that.currentPage = mData.pageable.pageNumber + 1;
               that.total = mData.totalElements;
               that.size = mData.size;
             }
           }
         })
-        .catch(function(error) {
+        .catch(()=> {
           // 请求失败处理
-          console.log(error);
+          // console.log(error);
         });
     },
     changePage(page) {
@@ -223,6 +294,7 @@ export default {
         headers: { auth: sessionStorage.getItem("auth") },
         params: {
           page: page,
+          status: that.mstatus,
           title: that.input,
           size: that.size
         }
@@ -233,6 +305,12 @@ export default {
           if (response.status == 200) {
             let mData = response.data.data;
             that.items = mData.content;
+            for (let x in mData.content) {
+              that.srcList[x] = [];
+              that.srcList[x][0] = mData.content[x].undertaking;
+              that.imgList[x] = [];
+              that.imgList[x][0] = mData.content[x].img;
+            }
             that.currentPage = mData.pageable.pageNumber + 1;
             that.total = mData.totalElements;
             that.size = mData.size;
@@ -241,10 +319,10 @@ export default {
             }
           }
         })
-        .catch(function(error) {
-          hideLoading();
+        .catch(()=>{
+          // hideLoading();
           // 请求失败处理
-          console.log(error);
+          // console.log(error);
         });
     }
   }

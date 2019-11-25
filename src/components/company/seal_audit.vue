@@ -1,10 +1,10 @@
 <template>
   <div class style="width: 800px;">
     <el-row class="my-3">
-      <el-col :span="3" class="text-right">印章名称：</el-col>
-      <el-col :span="9">{{item.title}}</el-col>
       <el-col :span="3" class="text-right">企业名称：</el-col>
       <el-col :span="9">{{item.org_name}}</el-col>
+      <el-col :span="3" class="text-right">印章类型：</el-col>
+      <el-col :span="9">{{item.name}}</el-col>
     </el-row>
     <el-row class="my-3">
       <el-col :span="3" class="text-right">承诺书：</el-col>
@@ -19,17 +19,20 @@
     <el-row class="my-3">
       <el-col :span="3" class="text-right">状态：</el-col>
       <el-col :span="9">
-        <el-tag effect="dark" v-if="item.status==1" type size="small">企业上报</el-tag>
-        <el-tag effect="dark" v-if="item.status==2" type="warning" size="small">生成中</el-tag>
-        <el-tag effect="dark" v-if="item.status==3" type="danger" size="small">退回</el-tag>
-        <el-tag effect="dark" v-if="item.status==4" type="success" size="small">已生成</el-tag>
+        <el-radio v-model="radio" label="2">通过</el-radio>
+        <el-radio v-model="radio" label="3">退回</el-radio>
       </el-col>
-      <el-col :span="3" class="text-right">备注：</el-col>
-      <el-col :span="9">{{item.remark}}</el-col>
     </el-row>
     <el-row class="my-3">
-      <el-col :span="3" class="text-right">印章类型：</el-col>
-      <el-col :span="9">{{item.name}}</el-col>
+      <el-col :span="3" class="text-right">意见：</el-col>
+      <el-col :span="9">
+        <el-input type="textarea" v-model="desc" placeholder="请填写意见"></el-input>
+      </el-col>
+    </el-row>
+    <el-row class="my-3">
+      <el-col class="text-center">
+        <el-button type="primary" size="medium" @click="msubmit" :loading="loading">提交</el-button>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -40,6 +43,9 @@ export default {
   data() {
     return {
       id: null,
+      radio: "2",
+      desc: "",
+      loading: false,
       item: {
         title: "加载中...",
         img: "加载中...",
@@ -64,7 +70,7 @@ export default {
         headers: { auth: sessionStorage.getItem("auth") }
       })
         .then(function(response) {
-          // console.log(response);
+          //   console.log(response);
           if (response.data.code == 1) {
             that.item = response.data.data[0];
           }
@@ -72,6 +78,37 @@ export default {
         .catch(() => {
           // console.log(error);
         });
+    }
+  },
+  methods: {
+    msubmit() {
+        this.loading=true;
+      const that = this;
+      this.$axios({
+        url: that.GLOBAL.m_mainUrl + "/seal/check",
+        method: "post",
+        params: {
+          id: that.id,
+          status: that.radio,
+          remark: that.desc
+        }
+      })
+        .then(response => {
+          //   console.log(response)
+          if (response.data.code == 1) {
+            that.$message({
+              message: response.data.message,
+              duration: 2000,
+              type: "success"
+            });
+            
+            setTimeout(() => {
+                document.querySelector("#s_refresh").value=false;
+                document.querySelector("#s_refresh").dispatchEvent(new Event("input"));
+            }, 800);
+          }
+        })
+        .catch(() => {});
     }
   }
 };
